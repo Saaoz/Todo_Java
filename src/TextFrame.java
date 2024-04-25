@@ -5,49 +5,20 @@ import java.awt.event.ActionListener;
 
 public class TextFrame extends JFrame implements ActionListener {
     // Components
-
+    private JTextField t; // Field for text input
+    private JButton b;    // Button to trigger action
     private DefaultListModel<String> model; // model pour stocker les tâches
     private JList<String> list; //Liste pour afficher les tâches
-
-    private void initUI() {
-        JPanel inputPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-
-        // Pour le JTextField
-        c.weightx = 0.9; // Lui donner la majeure partie de l'espace horizontal
-        c.gridx = 0; // Position sur la grille x (début)
-        c.gridy = 0; // Position sur la grille y (en haut)
-        t = new JTextField(10); // Ajustez ce nombre selon le besoin
-        inputPanel.add(t, c);
-
-        // Pour le JButton
-        c.weightx = 0.1; // Lui donner moins d'espace horizontal
-        c.gridx = 1; // Position à côté du JTextField
-        c.gridy = 0; // Même rangée que le JTextField
-        b = new JButton("Submit");
-        b.addActionListener(this);
-        inputPanel.add(b, c);
-
-        // Ajouter le panel à votre JFrame
-        this.add(inputPanel, BorderLayout.NORTH);
-    }
-
-
 
     // Constructor
     public TextFrame(){
         // Initialisation de la fenêtre et des composants
         super("Todo list"); // Appelle le constructeur de JFrame
-        initUI();
-
-
+        //iniate list model and the list
         model = new DefaultListModel<>();
         list = new JList<>(model);
-        t = new JTextField(10); //texte avec 16 colonnes
-        b = new JButton("Submit");
-        b.addActionListener(this); // link listener + bouton
+
+        initUI();
 
         //Update to center list object
         list.setCellRenderer(new DefaultListCellRenderer() {
@@ -60,20 +31,21 @@ public class TextFrame extends JFrame implements ActionListener {
             }
         });
 
-
         // Panel pour organiser les composants
         JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         inputPanel.add(t);
         inputPanel.add(b);
 
-        //margin de linput
+        //margin input
         inputPanel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
         inputPanel.add(Box.createHorizontalStrut(10), BorderLayout.WEST);
 
+        Font fontList = new Font("Arial", Font.PLAIN, 25);
 
-        //Configuration de la liste
+        //Configuration de la list
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setVisibleRowCount(8);
+        list.setFont(fontList);
         JScrollPane listScroller = new JScrollPane(list);
         listScroller.setPreferredSize(new Dimension(250,80));
 
@@ -89,6 +61,40 @@ public class TextFrame extends JFrame implements ActionListener {
         this.pack();
         this.setVisible(true);
     }
+//group in input + button
+    private void initUI() {
+        JPanel inputPanel = new JPanel(new GridBagLayout());
+        inputPanel.setBackground(Color.DARK_GRAY);
+
+        GridBagConstraints c = new GridBagConstraints();
+
+        Font font = new Font("Arial", Font.BOLD, 15);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(5, 5, 5 ,5);
+
+        c.weightx = 0.9;
+        c.gridx = 0;
+        c.gridy = 0;
+        t = new JTextField(15);
+        t.setFont(font);
+
+        inputPanel.add(t, c);
+
+        c.weightx = 0.1;
+        c.gridx = 1;
+        c.gridy = 0;
+        b = new JButton("Submit");
+        b.setFont(font);
+        b.addActionListener(this);
+        inputPanel.add(b, c);
+
+        t.setPreferredSize(new Dimension(200, 20)); // Largeur de 200 pixels et hauteur de 20 pixels pour le champ de texte
+        b.setPreferredSize(new Dimension(100, 20)); // Largeur de 100 pixels et hauteur de 20 pixels pour le bouton
+
+        this.add(inputPanel, BorderLayout.NORTH);
+    }
+
 
     // Méthode d'ActionListener
     @Override
